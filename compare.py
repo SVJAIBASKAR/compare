@@ -103,7 +103,7 @@ if data is not None and not st.session_state.downloaded:
         upload = pd.concat([upload, pd.DataFrame(new_rows)], ignore_index=True)
 
         # Display the first few rows of the DataFrame
-        #st.write(upload.head())
+        st.write(upload.head())
 
         # Provide a download button
         @st.cache_data
