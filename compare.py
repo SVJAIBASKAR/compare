@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+import openpyxl
 
 # Title of the app
 st.title("Excel File Uploader")
