@@ -57,7 +57,7 @@ if data is not None and not st.session_state.downloaded:
                 # Create a new row dictionary
                 new_row = {
                     '*Sale Order Number': row['Order Number'],
-                    '*Pickup Location Name': group_order['Store Name'].values[0],
+                    '*Pickup Location Name': 'KRISH ACCESSORIES D2C',
                     '*Transport Mode': "Flyer",
                     '*Payment Mode': "Prepaid",
                     'COD Amount': "",
@@ -114,9 +114,9 @@ if data is not None and not st.session_state.downloaded:
         csv = convert_df(upload)
 
         if st.download_button(
-            label="Download data as CSV",
+            label="Download data ",
             data=csv,
-            file_name='output_file.csv',
+            file_name='output_file.xlsx',
             mime='text/csv',
         ):
             st.session_state.downloaded = True
