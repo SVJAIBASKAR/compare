@@ -1,7 +1,13 @@
 import streamlit as st
 import pandas as pd
+from io import BytesIO
 
-
+def convert_df_to_excel(df):
+    output = BytesIO()
+    with pd.ExcelWriter(output, engine='xlsxwriter') as writer:
+        df.to_excel(writer, index=False, sheet_name='Sheet1')
+    processed_data = output.getvalue()
+    return processed_data
 # Title of the app
 st.title("Excel File Uploader")
 
@@ -58,7 +64,7 @@ if data is not None and not st.session_state.downloaded:
                 new_row = {
                     '*Sale Order Number': row['Order Number'],
                     '*Pickup Location Name': 'KRISH ACCESSORIES D2C',
-                    '*Transport Mode': "Flyer",
+                    '*Transport Mode': "Surface",
                     '*Payment Mode': "Prepaid",
                     'COD Amount': "",
                     '*Customer Name': group_order['Customer Name'].values[0],
@@ -106,18 +112,16 @@ if data is not None and not st.session_state.downloaded:
         #st.write(upload.head())
 
         # Provide a download button
-        @st.cache_data
-        def convert_df(df):
-            # IMPORTANT: Cache the conversion to prevent computation on every rerun
-            return df.to_csv(index=False).encode('utf-8')
+        excel_data = convert_df_to_excel(upload)
+        #excel_data = upload.to_excel('upload.xlsx', index=False)
 
-        csv = convert_df(upload)
+
 
         if st.download_button(
-            label="Download data ",
-            data=csv,
-            file_name='output_file.xlsx',
-            mime='text/csv',
+            label="Download data as Excel",
+            data=excel_data,
+            file_name='Output.xlsx',
+            #mime='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
         ):
             st.session_state.downloaded = True
             st.experimental_rerun()
