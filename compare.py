@@ -60,6 +60,8 @@ if data is not None and not st.session_state.downloaded:
         for index, row in merged_inquiry_df.iterrows():
             group_order = order[order['Order Number'].astype(str).str.lower() == row['Order Number'].lower()]
             if not group_order.empty:
+                customer_phone = str(group_order['Customer Mobile Number'].values[0]).replace('91', '', 1).strip()
+
                 # Create a new row dictionary
                 new_row = {
                     '*Sale Order Number': row['Order Number'],
@@ -68,7 +70,7 @@ if data is not None and not st.session_state.downloaded:
                     '*Payment Mode': "Prepaid",
                     'COD Amount': "",
                     '*Customer Name': group_order['Customer Name'].values[0],
-                    '*Customer Phone': group_order['Customer Mobile Number'].values[0],
+                    '*Customer Phone': customer_phone,
                     '*Shipping Address Line1': group_order['Shipping Address'].values[0],
                     'Shipping Address Line2': "",
                     '*Shipping City': group_order['City'].values[0],
