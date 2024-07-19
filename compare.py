@@ -30,16 +30,17 @@ if data is not None and not st.session_state.downloaded:
 
         true_order = order[order['Confirmed Order'].astype(str).str.lower() == 'true']
         true_inquiry = inquiry[inquiry['Confirmed Order'].astype(str).str.lower() == 'true']
+        true_inquiry ['Qty Ordered'] = inquiry['Product Name'] + ":"+inquiry['Item Count'].astype(str)
         true_order_number = true_order['Order Number'].str.lower()
         filtered_inquiry_df = true_inquiry[true_inquiry['Order Number'].str.lower().isin(true_order_number)]
 
         merged_inquiry_df = filtered_inquiry_df.groupby('Order Number', as_index=False).agg({
             'Product Name': lambda x: ', '.join(x.astype(str)),
+            'Qty Ordered': lambda x: ', '.join(x.astype(str)),
             'Product Weight': lambda x: x.sum() * 1000
         })
 
         column_names = [
-        
             '*Sale Order Number', '*Pickup Location Name', '*Transport Mode',
             '*Payment Mode', 'COD Amount', '*Customer Name', '*Customer Phone',
             '*Shipping Address Line1', 'Shipping Address Line2', '*Shipping City',
@@ -60,6 +61,7 @@ if data is not None and not st.session_state.downloaded:
 
         for index, row in merged_inquiry_df.iterrows():
             group_order = order[order['Order Number'].astype(str).str.lower() == row['Order Number'].lower()]
+
             if not group_order.empty:
                 customer_phone = str(group_order['Customer Mobile Number'].values[0]).replace('91', '', 1).strip()
 
@@ -79,7 +81,7 @@ if data is not None and not st.session_state.downloaded:
                     '*Shipping Pincode': group_order['Pincode'].values[0],
                     '*Item Sku Code': row['Product Name'],
                     '*Item Sku Name': row['Product Name'],
-                    '*Quantity Ordered': "1",
+                    '*Quantity Ordered': row['Qty Ordered'],
                     'Packaging Type': "",
                     '*Unit Item Price': group_order['Total Amount'].values[0],
                     'Length (cm)': "10",
