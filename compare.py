@@ -3,7 +3,6 @@ import pandas as pd
 from io import BytesIO
 
 def convert_df_to_excel(df):
-    
     output = BytesIO()
     with pd.ExcelWriter(output, engine='xlsxwriter') as writer:
         df.to_excel(writer, index=False, sheet_name='Sheet1')
@@ -37,15 +36,15 @@ if data is not None and not st.session_state.downloaded:
     (inquiry['Confirmed Order'].astype(str).str.lower() == 'true') &
     (inquiry['Order Status'].astype(str).str.upper() == 'COMPLETED')
 ]
-        true_inquiry ['Qty Ordered'] = inquiry['Product Name'] + ":"+inquiry['Item Count'].astype(str)
+        true_inquiry ['Qty Ordered'] = inquiry['Product Name'] + " "+ "["+ inquiry['Item Count'].astype(str) + "]"
         true_order_number = true_order['Order Number'].str.lower()
         filtered_inquiry_df = true_inquiry[true_inquiry['Order Number'].str.lower().isin(true_order_number)]
 
         merged_inquiry_df = filtered_inquiry_df.groupby('Order Number', as_index=False).agg({
-            'Product Name': lambda x: ', '.join(x.astype(str)),
-            'Qty Ordered': lambda x: ', '.join(x.astype(str)),
-            'Product Weight': lambda x: x.sum() * 1000
-        })
+    'Product Name': lambda x: ', '.join(x.astype(str)),
+    'Qty Ordered': lambda x: '\n '.join([f"{i+1}) {item}" for i, item in enumerate(x.astype(str))]),
+    'Product Weight': lambda x: x.sum() * 1000  # convert weight to grams
+})
 
         column_names = [
             '*Sale Order Number', '*Pickup Location Name', '*Transport Mode',
