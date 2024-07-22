@@ -28,8 +28,14 @@ if data is not None and not st.session_state.downloaded:
         inquiry = pd.read_excel(data, sheet_name='Inquiries')
         st.success("File uploaded and read successfully!")
 
-        true_order = order[order['Confirmed Order'].astype(str).str.lower() == 'true']
-        true_inquiry = inquiry[inquiry['Confirmed Order'].astype(str).str.lower() == 'true']
+        true_order = order[
+    (order['Confirmed Order'].astype(str).str.lower() == 'true') &
+    (order['Order Status'].astype(str).str.upper() == 'COMPLETED')
+]
+        true_inquiry = inquiry[
+    (inquiry['Confirmed Order'].astype(str).str.lower() == 'true') &
+    (inquiry['Order Status'].astype(str).str.upper() == 'COMPLETED')
+]
         true_inquiry ['Qty Ordered'] = inquiry['Product Name'] + ":"+inquiry['Item Count'].astype(str)
         true_order_number = true_order['Order Number'].str.lower()
         filtered_inquiry_df = true_inquiry[true_inquiry['Order Number'].str.lower().isin(true_order_number)]
@@ -80,8 +86,8 @@ if data is not None and not st.session_state.downloaded:
                     '*Shipping State': group_order['State'].values[0],
                     '*Shipping Pincode': group_order['Pincode'].values[0],
                     '*Item Sku Code': row['Product Name'],
-                    '*Item Sku Name': row['Product Name'],
-                    '*Quantity Ordered': row['Qty Ordered'],
+                    '*Item Sku Name': row['Qty Ordered'],
+                    '*Quantity Ordered': "1",
                     'Packaging Type': "",
                     '*Unit Item Price': group_order['Total Amount'].values[0],
                     'Length (cm)': "10",
