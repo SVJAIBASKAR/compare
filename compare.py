@@ -42,7 +42,7 @@ if data is not None and not st.session_state.downloaded:
 
         merged_inquiry_df = filtered_inquiry_df.groupby('Order Number', as_index=False).agg({
     'Product Name': lambda x: ', '.join(x.astype(str)),
-    'Qty Ordered': lambda x: '\n '.join([f"{i+1}) {item}" for i, item in enumerate(x.astype(str))]),
+    'Qty Ordered': lambda x: '\n'.join([f"{i+1}) {item}" for i, item in enumerate(x.astype(str))]),
     'Product Weight': lambda x: x.sum() * 1000  # convert weight to grams
 })
 
