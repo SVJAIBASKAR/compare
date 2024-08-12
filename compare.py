@@ -1,8 +1,6 @@
 import streamlit as st
 import pandas as pd
 from io import BytesIO
-def rerun():
-    raise st.script_runner.RerunException(st.script_request_queue.RerunData(None))
 
 def convert_df_to_excel(df):
     output = BytesIO()
@@ -137,7 +135,7 @@ if data is not None and not st.session_state.downloaded:
             #mime='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
         ):
             st.session_state.downloaded = True
-            rerun()
+            st.experimental_rerun()
 
     except Exception as e:
         st.error(f"Error reading the Excel file: {e}")
@@ -145,4 +143,4 @@ if data is not None and not st.session_state.downloaded:
 # Reset the state for a new upload
 if st.session_state.downloaded:
     st.session_state.downloaded = False
-    rerun()
+    st.experimental_rerun()
