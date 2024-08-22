@@ -1,6 +1,8 @@
 import streamlit as st
 import pandas as pd
 from io import BytesIO
+def rerun():
+    raise st.script_runner.RerunException(st.script_request_queue.RerunData(None))
 
 def convert_df_to_excel(df):
     output = BytesIO()
@@ -29,16 +31,16 @@ if data is not None and not st.session_state.downloaded:
         st.success("File uploaded and read successfully!")
 
         true_order = order[
-    (order['Confirmed Order'].astype(str).str.lower() == 'true') &
+    (order['Confirmed Order'].astype(str).str.upper() == 'true') &
     (order['Order Status'].astype(str).str.upper() == 'COMPLETED')
 ]
         true_inquiry = inquiry[
-    (inquiry['Confirmed Order'].astype(str).str.lower() == 'true') &
+    (inquiry['Confirmed Order'].astype(str).str.upper() == 'true') &
     (inquiry['Order Status'].astype(str).str.upper() == 'COMPLETED')
 ]
         true_inquiry ['Qty Ordered'] = inquiry['Product Name'] + " "+ "["+ inquiry['Item Count'].astype(str) + "]"
-        true_order_number = true_order['Order Number'].str.lower()
-        filtered_inquiry_df = true_inquiry[true_inquiry['Order Number'].str.lower().isin(true_order_number)]
+        true_order_number = true_order['Order Number'].astype(str).str.upper()
+        filtered_inquiry_df = true_inquiry[true_inquiry['Order Number'].astype(str).str.upper().isin(true_order_number)]
 
         merged_inquiry_df = filtered_inquiry_df.groupby('Order Number', as_index=False).agg({
     'Product Name': lambda x: ', '.join(x.astype(str)),
@@ -66,7 +68,7 @@ if data is not None and not st.session_state.downloaded:
         new_rows = []
 
         for index, row in merged_inquiry_df.iterrows():
-            group_order = order[order['Order Number'].astype(str).str.lower() == row['Order Number'].lower()]
+            group_order = order[order['Order Number'].astype(str).str.upper() == row['Order Number'].upper()]
 
             if not group_order.empty:
                 customer_phone = str(group_order['Customer Mobile Number'].values[0]).replace('91', '', 1).strip()
@@ -135,7 +137,7 @@ if data is not None and not st.session_state.downloaded:
             #mime='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
         ):
             st.session_state.downloaded = True
-            st.experimental_rerun()
+            rerun()
 
     except Exception as e:
         st.error(f"Error reading the Excel file: {e}")
@@ -143,4 +145,4 @@ if data is not None and not st.session_state.downloaded:
 # Reset the state for a new upload
 if st.session_state.downloaded:
     st.session_state.downloaded = False
-    st.experimental_rerun()
+    rerun()
