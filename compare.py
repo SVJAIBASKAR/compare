@@ -31,11 +31,11 @@ if data is not None and not st.session_state.downloaded:
         st.success("File uploaded and read successfully!")
 
         true_order = order[
-    (order['Confirmed Order'].astype(str).str.upper() == 'true') &
+    (order['Confirmed Order'].astype(str).str.lower() == 'true') &
     (order['Order Status'].astype(str).str.upper() == 'COMPLETED')
 ]
         true_inquiry = inquiry[
-    (inquiry['Confirmed Order'].astype(str).str.upper() == 'true') &
+    (inquiry['Confirmed Order'].astype(str).str.lower() == 'true') &
     (inquiry['Order Status'].astype(str).str.upper() == 'COMPLETED')
 ]
         true_inquiry ['Qty Ordered'] = inquiry['Product Name'] + " "+ "["+ inquiry['Item Count'].astype(str) + "]"
