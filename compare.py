@@ -68,7 +68,7 @@ if data is not None and not st.session_state.downloaded:
         new_rows = []
 
         for index, row in merged_inquiry_df.iterrows():
-            group_order = order[order['Order Number'].astype(str).str.upper() == row['Order Number'].astype(str).str.upper()]
+            group_order = order[order['Order Number'].astype(str).str.upper() == row['Order Number']]
 
             if not group_order.empty:
                 customer_phone = str(group_order['Customer Mobile Number'].values[0]).replace('91', '', 1).strip()
