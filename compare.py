@@ -34,6 +34,9 @@ if data is not None and not st.session_state.downloaded:
     (order['Confirmed Order'].astype(str).str.lower() == 'true') &
     (order['Order Status'].astype(str).str.upper() == 'COMPLETED')
 ]
+        true_order["Payment Mode"] = true_order["Payment Mode"].astype(str).str.upper()
+        true_order.loc[true_order["Payment Mode"] == "RAZORPAY", "Payment Method"] = "Prepaid"
+        true_order.loc[true_order["Payment Mode"] == "PARTIAL COD", "Payment Method"] = "COD"
         true_inquiry = inquiry[
     (inquiry['Confirmed Order'].astype(str).str.lower() == 'true') &
     (inquiry['Order Status'].astype(str).str.upper() == 'COMPLETED')
@@ -69,17 +72,21 @@ if data is not None and not st.session_state.downloaded:
 
         for index, row in merged_inquiry_df.iterrows():
             group_order = order[order['Order Number'] == row['Order Number']]
+            payment_mode = true_order.loc[true_order["Order Number"] == row['Order Number'], "Payment Method"].values[0]
 
             if not group_order.empty:
                 customer_phone = str(group_order['Customer Mobile Number'].values[0]).replace('91', '', 1).strip()
+                cod_amount = None
+                if (payment_mode =="COD"):
+                    cod_amount= int(group_order['Total Amount'].values[0]) - 300
 
                 # Create a new row dictionary
                 new_row = {
                     '*Sale Order Number': row['Order Number'],
                     '*Pickup Location Name': 'KRISH ACCESSORIES D2C',
                     '*Transport Mode': "Surface",
-                    '*Payment Mode': "Prepaid",
-                    'COD Amount': "",
+                    '*Payment Mode':  payment_mode,
+                    'COD Amount': cod_amount,
                     '*Customer Name': group_order['Customer Name'].values[0],
                     '*Customer Phone': customer_phone,
                     '*Shipping Address Line1': group_order['Shipping Address'].values[0],
