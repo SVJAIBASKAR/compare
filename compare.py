@@ -35,8 +35,9 @@ if data is not None and not st.session_state.downloaded:
     (order['Order Status'].astype(str).str.upper() == 'COMPLETED')
 ]
         true_order["Payment Mode"] = true_order["Payment Mode"].astype(str).str.upper()
-        true_order.loc[true_order["Payment Mode"] == "RAZORPAY", "Payment Method"] = "Prepaid"
-        true_order.loc[true_order["Payment Mode"] == "PARTIAL COD", "Payment Method"] = "COD"
+        true_order.loc[true_order["Payment Mode"].astype(str).str.upper() == "RAZORPAY", "Payment Method"] = "Prepaid"
+        true_order.loc[true_order["Payment Mode"].astype(str).str.upper() == "PARTIAL COD", "Payment Method"] = "PCOD"
+        true_order.loc[true_order["Payment Mode"].astype(str).str.upper() == "CASH ON DELIVERY", "Payment Method"] = "COD"
         true_inquiry = inquiry[
     (inquiry['Confirmed Order'].astype(str).str.lower() == 'true') &
     (inquiry['Order Status'].astype(str).str.upper() == 'COMPLETED')
@@ -77,8 +78,10 @@ if data is not None and not st.session_state.downloaded:
             if not group_order.empty:
                 customer_phone = str(group_order['Customer Mobile Number'].values[0]).replace('91', '', 1).strip()
                 cod_amount = None
-                if (payment_mode =="COD"):
-                    cod_amount= int(group_order['Total Amount'].values[0]) - 300
+                if (payment_mode =="PCOD"):
+                    cod_amount= int(group_order['Total Amount']==values[0]) - 400
+                elif ((payment_mode =="COD")):
+                    cod_amount= int(group_order['Total Amount'].values[0])
 
                 # Create a new row dictionary
                 new_row = {
