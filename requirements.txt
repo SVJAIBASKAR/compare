@@ -2,8 +2,8 @@ streamlit==1.4.0
 pandas
 openpyxl
 xlsxwriter
-document
-pt
-oxmlelement
+Document
+Pt
+OxmlElement
 qn
 WD_ALIGN_PARAGRAPH
