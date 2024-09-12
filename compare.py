@@ -80,6 +80,7 @@ if data is not None and not st.session_state.downloaded:
                 cod_amount = None
                 if (payment_mode =="PCOD"):
                     cod_amount= int(group_order['Total Amount'].values[0]) - 400
+                    payment_mode = "COD"
                 elif ((payment_mode =="COD")):
                     cod_amount= int(group_order['Total Amount'].values[0])
 
