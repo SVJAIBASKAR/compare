@@ -3,8 +3,3 @@ python-docx
 pandas
 openpyxl
 xlsxwriter
-Document
-Pt
-OxmlElement
-qn
-WD_ALIGN_PARAGRAPH
