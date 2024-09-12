@@ -2,3 +2,8 @@ streamlit==1.4.0
 pandas
 openpyxl
 xlsxwriter
+document
+pt
+oxmlelement
+qn
+WD_ALIGN_PARAGRAPH
