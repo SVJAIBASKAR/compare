@@ -79,7 +79,7 @@ if data is not None and not st.session_state.downloaded:
                 customer_phone = str(group_order['Customer Mobile Number'].values[0]).replace('91', '', 1).strip()
                 cod_amount = None
                 if (payment_mode =="PCOD"):
-                    cod_amount= int(group_order['Total Amount']==values[0]) - 400
+                    cod_amount= int(group_order['Total Amount'].values[0]) - 400
                 elif ((payment_mode =="COD")):
                     cod_amount= int(group_order['Total Amount'].values[0])
 
