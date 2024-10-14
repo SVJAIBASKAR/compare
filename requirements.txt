@@ -1,7 +1,5 @@
-streamlit==1.4.0
+streamlit==1.39.0
 python-docx
 pandas
 openpyxl
-xlsxwriter==3.2.0
-protobuf==3.20.*
 
