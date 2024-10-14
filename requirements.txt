@@ -3,3 +3,4 @@ python-docx
 pandas
 openpyxl
 xlsxwriter
+protobuf==3.20.*
