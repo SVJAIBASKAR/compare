@@ -2,4 +2,6 @@ streamlit>=1.39.0
 python-docx
 pandas
 openpyxl
+XlsxWriter
+
 
