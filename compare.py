@@ -7,10 +7,16 @@ from docx.oxml import OxmlElement
 from docx.oxml.ns import qn
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 
-def rerun():
-    raise st.script_runner.RerunException(st.script_request_queue.RerunData(None))
+#def rerun():
+    #raise st.script_runner.RerunException(st.script_request_queue.RerunData(None))
 # Function to add customer details
+if "rerun_counter" not in st.session_state:
+    st.session_state.rerun_counter = 0
 
+# Function to trigger rerun by incrementing a counter
+def rerun():
+    st.session_state.rerun_counter += 1
+    
 def set_page_size(doc, width_mm=148, height_mm=210):
     # Convert mm to twips (1 mm = 567 twips)
     width_twips = int(width_mm * 567)
