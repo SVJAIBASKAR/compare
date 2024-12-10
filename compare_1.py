@@ -6,12 +6,6 @@ from docx.shared import Pt
 from docx.oxml import OxmlElement
 from docx.oxml.ns import qn
 from docx.enum.text import WD_ALIGN_PARAGRAPH
-import matplotlib.pyplot as plt
-from matplotlib.backends.backend_pdf import PdfPages
-import io
-from datetime import datetime
-
-
 
 #def rerun():
     #raise st.script_runner.RerunException(st.script_request_queue.RerunData(None))
@@ -22,7 +16,7 @@ if "rerun_counter" not in st.session_state:
 # Function to trigger rerun by incrementing a counter
 def rerun():
     st.session_state.rerun_counter += 1
-
+    
 def set_page_size(doc, width_mm=148, height_mm=210):
     # Convert mm to twips (1 mm = 567 twips)
     width_twips = int(width_mm * 567)
@@ -124,36 +118,6 @@ def convert_df_to_excel(df):
         df.to_excel(writer, index=False, sheet_name='Sheet1')
     processed_data = output.getvalue()
     return processed_data
-
-# Function to generate PDF from DataFrame
-def dataframe_to_pdf(df):
-    buffer = io.BytesIO()  # Create an in-memory bytes buffer
-
-    # Create a figure and axis for the table
-    fig, ax = plt.subplots(figsize=(12, 6))  # Adjust size to fit the content
-    ax.axis('off')  # Hide the axis
-
-    # Render the DataFrame as a table
-    table = ax.table(
-        cellText=df.values,
-        colLabels=df.columns,
-        cellLoc='center',
-        loc='center',
-    )
-
-    # Adjust table properties
-    table.auto_set_font_size(False)
-    table.set_fontsize(8)  # Adjust font size
-    table.auto_set_column_width(col=list(range(len(df.columns))))  # Adjust column width
-
-    # Save to PDF
-    with PdfPages(buffer) as pdf:
-        pdf.savefig(fig, bbox_inches='tight')  # Save the current figure
-
-    plt.close(fig)  # Close the figure to free memory
-    buffer.seek(0)  # Reset buffer pointer to the beginning
-    return buffer
-
 # Title of the app
 st.title("Excel File Uploader")
 
@@ -211,13 +175,9 @@ if data is not None and not st.session_state.downloaded:
             'Seller GST Number', 'Seller Address Line1', 'Seller Address Line2',
             'Seller City', 'Seller State', 'Seller Pincode'
         ]
-        cust_column_names = ['Tdate','CNo','DeptDesc','CrCode','RefNo','cnee','Caddr1',
-        'Caddr2','Caddr3','CPincode','CPhone','Destn','Wt','Pcs','DDate','Status','RName','NonDStatus']
 
         upload = pd.DataFrame(columns=column_names)
-        cust_upload = pd.DataFrame(columns=cust_column_names)
         new_rows = []
-        cust_rows =[]
 
         for index, row in merged_inquiry_df.iterrows():
             group_order = order[order['Order Number'] == row['Order Number']]
@@ -282,40 +242,10 @@ if data is not None and not st.session_state.downloaded:
                     'Seller State': "",
                     'Seller Pincode': ""
                 }
-
-                # Create a new cust row dictionary
-                cust_row = {
-                    'Tdate':datetime.now().strftime("%Y-%m-%d"),
-                    'CNo':"",
-                    'DeptDesc':"",
-                    'CrCode':"MVY0254",
-                    'RefNo': row['Order Number'],
-                    'cnee':group_order['Customer Name'].values[0],
-                    'Caddr1':"",
-                    'Caddr2':"",
-                    'Caddr3':group_order['State'].values[0],
-                    'CPincode':group_order['Pincode'].values[0],
-                    'CPhone':"",
-                    'Destn':group_order['State'].values[0],
-                    'Wt':row['Product Weight'],
-                    'Pcs':"1",
-                    'DDate':"",
-                    'Status':"",
-                    'RName':"",
-                    'NonDStatus':""
-
-                }
                 # Append the new row to new_rows list
                 new_rows.append(new_row)
-                cust_rows.append(cust_row)
 
         upload = pd.concat([upload, pd.DataFrame(new_rows)], ignore_index=True)
-        cust_upload = pd.concat([cust_upload, pd.DataFrame(cust_rows)], ignore_index=True)
-        # Generate PDF for the updated DataFrame
-        pdf_buffer = dataframe_to_pdf(cust_upload)
-
-
-
         doc = Document()
         set_page_size(doc)
         payment_mode = upload.loc[upload["*Payment Mode"].str.upper() == "PREPAID"]
@@ -353,30 +283,12 @@ if data is not None and not st.session_state.downloaded:
         # Provide a download button
         excel_data = convert_df_to_excel(upload)
         #excel_data = upload.to_excel('upload.xlsx', index=False)
-        cust_excel_data = convert_df_to_excel(cust_upload)
 
         if st.download_button(
                     label="Download data as Excel",
                     data=excel_data,
                     file_name='Output.xlsx',
                     #mime='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-                ):
-                    st.session_state.downloaded = True
-                    rerun()
-        if st.download_button(
-                    label="Download booking data as Excel",
-                    data=cust_excel_data,
-                    file_name='booking.xlsx',
-                    #mime='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-                ):
-                    st.session_state.downloaded = True
-                    rerun()
-
-        if st.download_button(
-                    label="Download  booking data as PDF",
-                    data=pdf_buffer,
-                    file_name="booking_data.pdf",
-                    mime="application/pdf"
                 ):
                     st.session_state.downloaded = True
                     rerun()
