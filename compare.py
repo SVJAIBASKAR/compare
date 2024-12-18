@@ -213,11 +213,13 @@ if data is not None and not st.session_state.downloaded:
         ]
         cust_column_names = ['Tdate','CNo','DeptDesc','CrCode','RefNo','cnee','Caddr1',
         'Caddr2','Caddr3','CPincode','CPhone','Destn','Wt','Pcs','DDate','Status','RName','NonDStatus']
-
+        dispatch_column_names = ['Tdate','CrCode','RefNo','cnee','CPincode']
         upload = pd.DataFrame(columns=column_names)
         cust_upload = pd.DataFrame(columns=cust_column_names)
+        dispatch_upload = pd.DataFrame(columns=dispatch_column_names)
         new_rows = []
         cust_rows =[]
+        dispatch_rows=[]
 
         for index, row in merged_inquiry_df.iterrows():
             group_order = order[order['Order Number'] == row['Order Number']]
@@ -305,14 +307,23 @@ if data is not None and not st.session_state.downloaded:
                     'NonDStatus':""
 
                 }
+                dispatch_row= {
+                    'Tdate':datetime.now().strftime("%Y-%m-%d"),
+                    'CrCode':"MVY0254",
+                    'RefNo': row['Order Number'],
+                    'cnee':group_order['Customer Name'].values[0],
+                    'CPincode':group_order['Pincode'].values[0]
+                }
                 # Append the new row to new_rows list
                 new_rows.append(new_row)
                 cust_rows.append(cust_row)
+                dispatch_rows.append(dispatch_row)
 
         upload = pd.concat([upload, pd.DataFrame(new_rows)], ignore_index=True)
         cust_upload = pd.concat([cust_upload, pd.DataFrame(cust_rows)], ignore_index=True)
+        dispatch_upload = pd.concat([dispatch_upload, pd.DataFrame(cust_rows)], ignore_index=True)
         # Generate PDF for the updated DataFrame
-        pdf_buffer = dataframe_to_pdf(cust_upload)
+        pdf_buffer = dataframe_to_pdf(dispatch_upload)
 
 
 
