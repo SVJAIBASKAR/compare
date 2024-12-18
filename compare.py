@@ -321,7 +321,7 @@ if data is not None and not st.session_state.downloaded:
 
         upload = pd.concat([upload, pd.DataFrame(new_rows)], ignore_index=True)
         cust_upload = pd.concat([cust_upload, pd.DataFrame(cust_rows)], ignore_index=True)
-        dispatch_upload = pd.concat([dispatch_upload, pd.DataFrame(cust_rows)], ignore_index=True)
+        dispatch_upload = pd.concat([dispatch_upload, pd.DataFrame(dispatch_rows)], ignore_index=True)
         # Generate PDF for the updated DataFrame
         pdf_buffer = dataframe_to_pdf(dispatch_upload)
 
