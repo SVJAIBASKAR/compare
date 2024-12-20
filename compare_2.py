@@ -10,9 +10,7 @@ import matplotlib.pyplot as plt
 from matplotlib.backends.backend_pdf import PdfPages
 import io
 from datetime import datetime
-import math
-import re
-from docx.shared import Inches, Pt
+
 
 
 #def rerun():
@@ -47,130 +45,70 @@ def set_page_size(doc, width_mm=148, height_mm=210):
         # Add the new pgSize element
         sect_pr.append(pg_size)
 
-def add_customer_details(doc, customer_name, address, phone, product_name,bill_number,Total,add_notes,Sub_Total):
-    header = doc.sections[0].header
-    header_paragraph = header.paragraphs[0] if header.paragraphs else header.add_paragraph()
-    shop_add="Krish Accessories \n GG Nagar Nerkundram \n chennai-17"
-    header_paragraph.text =shop_add
-    header_paragraph.alignment = WD_ALIGN_PARAGRAPH.RIGHT
-    header_run = header_paragraph.runs[0]
-    header_run.font.size = Pt(14)
+def add_customer_details(doc, customer_name, address, phone, product_name,bill_number):
+    right_paragraph = doc.add_paragraph( bill_number)
+    right_paragraph.alignment = WD_ALIGN_PARAGRAPH.RIGHT
+    right_run = right_paragraph.runs[0]
+    right_run.font.size = Pt(16)
+    table = doc.add_table(rows=7, cols=2)
 
-
-
-    table = doc.add_table(rows=1, cols=2)
-    left_cell = table.cell(0, 0)
-    left_paragraph = left_cell.add_paragraph( "Order Number:"+bill_number)
-    left_paragraph.alignment = WD_ALIGN_PARAGRAPH.LEFT
-    left_run = left_paragraph.runs[0]
-    left_run.font.size = Pt(12)
-    table1 = doc.add_table(rows=3, cols=1)
     # Add customer name
-    cell1 = table1.cell(0, 0)
-    cell1.text = "Customer Name:"+customer_name
+    cell1 = table.cell(0, 0)
+    cell1.text = "Customer Name:"
     cell1_run = cell1.paragraphs[0].runs[0]
-    cell1_run.font.size = Pt(12)
+    cell1_run.font.size = Pt(16)
+
+    cell2 = table.cell(0, 1)
+    cell2.text = customer_name
+    cell2_run = cell2.paragraphs[0].runs[0]
+    cell2_run.font.size = Pt(16)
+
     # Add address
-    cell3 = table1.cell(1, 0)
-    cell3.text = "Address:"+address
+    cell3 = table.cell(1, 0)
+    cell3.text = "Address:"
     cell3_run = cell3.paragraphs[0].runs[0]
-    cell3_run.font.size = Pt(12)
+    cell3_run.font.size = Pt(16)
+
+    cell4 = table.cell(1, 1)
+    cell4.text = address
+    cell4_run = cell4.paragraphs[0].runs[0]
+    cell4_run.font.size = Pt(16)
+
     # Add phone
-    cell5 = table1.cell(2, 0)
-    cell5.text = "Customer Phone:"+phone
+    cell5 = table.cell(2, 0)
+    cell5.text = "Customer Phone:"
     cell5_run = cell5.paragraphs[0].runs[0]
-    cell5_run.font.size = Pt(12)
-    table2 = doc.add_table(rows=5, cols=1)
-    cell6 = table2.cell(0, 0)
-    cell6.text = "Terms & Conditions:"
+    cell5_run.font.size = Pt(16)
+
+    cell6 = table.cell(2, 1)
+    cell6.text = phone
     cell6_run = cell6.paragraphs[0].runs[0]
-    cell6_run.font.size = Pt(14)
-    cell6_1 = table2.cell(1, 0)
-    cell6_1.text = "•Unboxing video is mandatory for returns or replacements."
-    cell6_1_run = cell6_1.paragraphs[0].runs[0]
-    cell6_1_run.font.size = Pt(12)
-    cell6_2 = table2.cell(2, 0)
-    cell6_2.text = "•The address mentioned in this label is booking office's address."
-    cell6_2_run = cell6_2.paragraphs[0].runs[0]
-    cell6_2_run.font.size = Pt(12)
-    cell6_3 = table2.cell(3, 0)
-    cell6_3.text = "•Kindly do not return the parcel  to the booking office. We are not responsible if it is lost."
-    cell6_3_run = cell6_3.paragraphs[0].runs[0]
-    cell6_3_run.font.size= Pt(12)
-    cell6_4 = table2.cell(4, 0)
-    cell6_4.text = "•Return time is valid only for 7 days from the date of Return Approval."
-    cell6_4_run = cell6_4.paragraphs[0].runs[0]
-    cell6_4_run.font.size= Pt(12)
-    data = [["S.No", "Product Name","QTY", "Unit_Total"]]
-    product_list = product_name.split(",")
-    total_list=Sub_Total.split(",")
-    total_sum_list = [float(x) for x in Sub_Total.split(",")]
-    total_sum = sum(total_sum_list)
-    for idx, product in enumerate(product_list, start=1):
-        match = re.search(r'\[(\d+)\]', product)
-        number_in_brackets = match.group(1)
-        product_full_name = re.sub(r'\s*\[\d+\]', '', product).strip()
-        total_value = total_list[idx-1]
-        data.append([idx, product_full_name, number_in_brackets, total_value ])
+    cell6_run.font.size = Pt(16)
 
-    table_grid = doc.add_table(rows=1, cols=len(data[0]))
-    table_grid.style = 'Table Grid'  # Apply a grid style to the table
-    # Disable AutoFit to manually control column widths
-    # Set the column widths explicitly
-    table_grid.columns[0].width = Inches(0.5)  # S.No column
-    table_grid.columns[1].width = Inches(2.5)  # Product Name column
-    table_grid.columns[2].width = Inches(1.0)  # QTY column
-    table_grid.columns[3].width = Inches(1.5)  # Total column
+    # Add product name
+    cell7 = table.cell(3, 0)
+    cell7.text = "Product Name:"
+    cell7_run = cell7.paragraphs[0].runs[0]
+    cell7_run.font.size = Pt(16)
+
+    cell8 = table.cell(3, 1)
+    cell8.text = product_name
+    cell8_run = cell8.paragraphs[0].runs[0]
+    cell8_run.font.size = Pt(16)
 
 
 
+        # Add product name
+    cell10 = table.cell(5, 0)
+    cell10.text = "FROM"
+    cell10_run = cell10.paragraphs[0].runs[0]
+    cell10_run.font.size = Pt(16)
 
-    # Add Headers to the Table
-    hdr_cells = table_grid.rows[0].cells
-    for i, header in enumerate(data[0]):
-        table_grid.autofit = False
-        hdr_cells[i].text = str(header)
-        hdr_paragraph = hdr_cells[i].paragraphs[0]
-        hdr_paragraph.alignment = WD_ALIGN_PARAGRAPH.CENTER
-
-        # Add Table Rows
-# Add table rows
-    for row_data in data[1:]:
-        row = table_grid.add_row().cells
-        table_grid.autofit = False
-        for i, value in enumerate(row_data):
-            row[i].text = str(value)
-            row_paragraph = row[i].paragraphs[0]
-            #row_paragraph.alignment = WD_ALIGN_PARAGRAPH.CENTER
-
-
-
-
-
-    table_total = doc.add_table(rows=3, cols=4)
-    sub_total_cell = table_total.cell(0, 3)
-    sub_total_paragraph = sub_total_cell.add_paragraph("SubTotal:  "+ str(total_sum))
-    sub_total_paragraph.alignment = WD_ALIGN_PARAGRAPH.RIGHT
-    sub_total_paragraph = sub_total_paragraph.runs[0]
-    sub_total_paragraph.font.size = Pt(12)
-    ship_total_cell = table_total.cell(1, 3)
-    ship_total_paragraph = ship_total_cell.add_paragraph("Shipping: "+ '120')
-    ship_total_paragraph.alignment = WD_ALIGN_PARAGRAPH.RIGHT
-    ship_total_paragraph = ship_total_paragraph.runs[0]
-    ship_total_paragraph.font.size = Pt(12)
-    grand_total_cell = table_total.cell(2, 3)
-    grand_total_paragraph = grand_total_cell.add_paragraph("Total: "+str(total_sum+120))
-    grand_total_paragraph.alignment = WD_ALIGN_PARAGRAPH.RIGHT
-    grand_total_paragraph = grand_total_paragraph.runs[0]
-    grand_total_paragraph.font.size = Pt(12)
-
-    if add_notes and not isinstance(add_notes, float) or (isinstance(add_notes, float) and not math.isnan(add_notes)):
-        table_notes = doc.add_table(rows=1, cols=1)
-        notes_cell = table_notes.cell(0,0)
-        notes_paragraph = notes_cell.add_paragraph(str("Customer Notes:"+add_notes))
-        #grand_total_paragraph.alignment = WD_ALIGN_PARAGRAPH.RIGHT
-        grand_notes_paragraph = notes_paragraph.runs[0]
-        grand_notes_paragraph.font.size = Pt(12)
+            # Add product name
+    cell11 = table.cell(6, 0)
+    cell11.text = "Krish Accessories"
+    cell11_run = cell11.paragraphs[0].runs[0]
+    cell11_run.font.size = Pt(16)
 
     byte_stream = BytesIO()
     doc.save(byte_stream)  # Save the document into the BytesIO stream
@@ -254,7 +192,6 @@ if data is not None and not st.session_state.downloaded:
 
         merged_inquiry_df = filtered_inquiry_df.groupby('Order Number', as_index=False).agg({
     'Product Name': lambda x: ', '.join(x.astype(str)),
-    'Price': lambda x: ', '.join(x.astype(str)),
     'Qty Ordered': lambda x: ','.join(x.astype(str)),
     'Product Weight': lambda x: x.sum() * 1000  # convert weight to grams
 })
@@ -286,17 +223,14 @@ if data is not None and not st.session_state.downloaded:
 
         for index, row in merged_inquiry_df.iterrows():
             group_order = order[order['Order Number'] == row['Order Number']]
-        #    payment_mode = true_order.loc[true_order["Order Number"] == row['Order Number'], ["Payment Method","Additional Notes"]].values[0]
-        #    payment_mode = true_order.loc[true_order["Order Number"] == row['Order Number'], ["Payment Method", "Additional Notes"]].values[0]
-            payment_mode = true_order.loc[true_order["Order Number"] == row["Order Number"], ["Payment Method", "Additional Notes"]].values[0]
-
+            payment_mode = true_order.loc[true_order["Order Number"] == row['Order Number'], "Payment Method"].values[0]
 
             if not group_order.empty:
                 customer_phone = str(group_order['Customer Mobile Number'].values[0]).replace('91', '', 1).strip()
                 cod_amount = None
-                if (payment_mode =="PCOD").any():
+                if (payment_mode =="PCOD"):
                     cod_amount= int(group_order['Total Amount'].values[0]) - 400
-                elif ((payment_mode =="COD").any()):
+                elif ((payment_mode =="COD")):
                     cod_amount= int(group_order['Total Amount'].values[0])
 
 
@@ -312,7 +246,7 @@ if data is not None and not st.session_state.downloaded:
                     '*Sale Order Number': row['Order Number'],
                     '*Pickup Location Name': 'KRISH ACCESSORIES D2C',
                     '*Transport Mode': "Surface",
-                    '*Payment Mode':  payment_mode[0],
+                    '*Payment Mode':  payment_mode,
                     'COD Amount': cod_amount,
                     '*Customer Name': group_order['Customer Name'].values[0],
                     '*Customer Phone': customer_phone,
@@ -325,7 +259,6 @@ if data is not None and not st.session_state.downloaded:
                     '*Item Sku Name': row['Qty Ordered'],
                     '*Quantity Ordered': "1",
                     'Packaging Type': "",
-                    'Sub_Total': row['Price'],
                     '*Unit Item Price': group_order['Total Amount'].values[0],
                     'Length (cm)': "10",
                     'Breadth (cm)': "10",
@@ -349,16 +282,7 @@ if data is not None and not st.session_state.downloaded:
                     'Seller Address Line2': "",
                     'Seller City': "",
                     'Seller State': "",
-                    'Seller Pincode': "",
-                    'Notes':payment_mode[1]
-                }
-
-                word_row ={
-                "SL" : "",
-                "Product Name" :row['Product Name'],
-                "Qty" :row['Qty Ordered'],
-                "Total":group_order['Total Amount'].values[0],
-                "Notes":group_order['Additional Notes'].values[0]
+                    'Seller Pincode': ""
                 }
 
                 # Create a new cust row dictionary
@@ -390,8 +314,6 @@ if data is not None and not st.session_state.downloaded:
                     'cnee':group_order['Customer Name'].values[0],
                     'CPincode':group_order['Pincode'].values[0]
                 }
-
-
                 # Append the new row to new_rows list
                 new_rows.append(new_row)
                 cust_rows.append(cust_row)
@@ -408,16 +330,13 @@ if data is not None and not st.session_state.downloaded:
         doc = Document()
         set_page_size(doc)
         payment_mode = upload.loc[upload["*Payment Mode"].str.upper() == "PREPAID"]
-        Prepaid_order=payment_mode[["*Customer Name","*Shipping Address Line1","*Customer Phone","*Item Sku Name","*Sale Order Number","*Unit Item Price","Notes",'Sub_Total']]
+        Prepaid_order=payment_mode[["*Customer Name","*Shipping Address Line1","*Customer Phone","*Item Sku Name","*Sale Order Number"]]
         Prepaid_order = Prepaid_order.rename(columns={
     '*Customer Name': 'Customer_Name',
     '*Sale Order Number':'Order_Number',
     '*Shipping Address Line1': 'Address',
     '*Customer Phone': 'Customer_Phone',
-    '*Item Sku Name': 'Product_Name',
-    '*Unit Item Price':'Total',
-    'Notes':'Notes',
-    'Sub_Total':'Sub_Total'
+    '*Item Sku Name': 'Product_Name'
 })
 
         for i in range(len(Prepaid_order)):
@@ -430,13 +349,9 @@ if data is not None and not st.session_state.downloaded:
             customer_phone = row['Customer_Phone']
             product_name = row['Product_Name']
             order_number=row['Order_Number']
-            Unit_Total =row['Total']
-            Notes=row['Notes']
-            Sub_Total=row['Sub_Total']
-
 
     # Call the function to add customer details to the document
-            word_data=add_customer_details(doc, customer_name, address, customer_phone, product_name,order_number,Unit_Total,Notes,Sub_Total)
+            word_data=add_customer_details(doc, customer_name, address, customer_phone, product_name,order_number)
             #if (i + 1) % 2 == 0:
             doc.add_page_break()
 
