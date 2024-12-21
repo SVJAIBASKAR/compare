@@ -153,16 +153,7 @@ def add_customer_details(doc, customer_name, address, phone, product_name,bill_n
     sub_total_paragraph.alignment = WD_ALIGN_PARAGRAPH.RIGHT
     sub_total_paragraph = sub_total_paragraph.runs[0]
     sub_total_paragraph.font.size = Pt(12)
-    ship_total_cell = table_total.cell(1, 3)
-    ship_total_paragraph = ship_total_cell.add_paragraph("Shipping: "+ '120')
-    ship_total_paragraph.alignment = WD_ALIGN_PARAGRAPH.RIGHT
-    ship_total_paragraph = ship_total_paragraph.runs[0]
-    ship_total_paragraph.font.size = Pt(12)
-    grand_total_cell = table_total.cell(2, 3)
-    grand_total_paragraph = grand_total_cell.add_paragraph("Total: "+str(total_sum+120))
-    grand_total_paragraph.alignment = WD_ALIGN_PARAGRAPH.RIGHT
-    grand_total_paragraph = grand_total_paragraph.runs[0]
-    grand_total_paragraph.font.size = Pt(12)
+
 
     if add_notes and not isinstance(add_notes, float) or (isinstance(add_notes, float) and not math.isnan(add_notes)):
         table_notes = doc.add_table(rows=1, cols=1)
@@ -192,7 +183,7 @@ def dataframe_to_pdf(df):
     buffer = io.BytesIO()  # Create an in-memory bytes buffer
 
     # Create a figure and axis for the table
-    fig, ax = plt.subplots(figsize=(12, 6))  # Adjust size to fit the content
+    fig, ax = plt.subplots(figsize=(12, 14))  # Adjust size to fit the content
     ax.axis('off')  # Hide the axis
 
     # Render the DataFrame as a table
@@ -205,7 +196,7 @@ def dataframe_to_pdf(df):
 
     # Adjust table properties
     table.auto_set_font_size(False)
-    table.set_fontsize(8)  # Adjust font size
+    table.set_fontsize(12)  # Adjust font size
     table.auto_set_column_width(col=list(range(len(df.columns))))  # Adjust column width
 
     # Save to PDF
