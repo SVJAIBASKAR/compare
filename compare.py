@@ -48,43 +48,42 @@ def set_page_size(doc, width_mm=148, height_mm=210):
         sect_pr.append(pg_size)
 
 def add_customer_details(doc, customer_name, address, phone, product_name,bill_number,Total,add_notes,Sub_Total):
-    header = doc.sections[0].header
-    header_paragraph = header.paragraphs[0] if header.paragraphs else header.add_paragraph()
-    shop_add="Krish Accessories \n GG Nagar Nerkundram \n chennai-17"
-    header_paragraph.text =shop_add
-    header_paragraph.alignment = WD_ALIGN_PARAGRAPH.RIGHT
-    header_run = header_paragraph.runs[0]
-    header_run.font.size = Pt(14)
 
 
 
-    table = doc.add_table(rows=1, cols=2)
+
+    table = doc.add_table(rows=2, cols=2)
     left_cell = table.cell(0, 0)
     left_paragraph = left_cell.add_paragraph( "Order Number:"+bill_number)
     left_paragraph.alignment = WD_ALIGN_PARAGRAPH.LEFT
     left_run = left_paragraph.runs[0]
     left_run.font.size = Pt(12)
-    table1 = doc.add_table(rows=3, cols=1)
+    table1 = doc.add_table(rows=1, cols=3)
     # Add customer name
-    cell1 = table1.cell(0, 0)
+    cell1 = table.cell(1, 0)
     cell1.text = "Customer Name:"+customer_name
     cell1_run = cell1.paragraphs[0].runs[0]
     cell1_run.font.size = Pt(12)
     # Add address
-    cell3 = table1.cell(1, 0)
-    cell3.text = "Address:"+address
+    cell3 = table1.cell(0, 0)
+    cell3.text = "To Address:\n"+address
     cell3_run = cell3.paragraphs[0].runs[0]
     cell3_run.font.size = Pt(12)
+    # Add address
+    cell4 = table1.cell(0, 2)
+    shop_add="Krish Accessories\nGG Nagar, Nerkundram\nChennai 600017\n8939789237"
+    cell4.text = "From Address:\n"+shop_add
+    cell4.alignment = WD_ALIGN_PARAGRAPH.RIGHT
+    cell4_run = cell4.paragraphs[0].runs[0]
+    cell4_run.font.size = Pt(12)
+    table2 = doc.add_table(rows=5, cols=1)
     # Add phone
-    cell5 = table1.cell(2, 0)
+    cell5 = table2.cell(0, 0)
     cell5.text = "Customer Phone:"+phone
     cell5_run = cell5.paragraphs[0].runs[0]
     cell5_run.font.size = Pt(12)
-    table2 = doc.add_table(rows=5, cols=1)
-    cell6 = table2.cell(0, 0)
-    cell6.text = "Terms & Conditions:"
-    cell6_run = cell6.paragraphs[0].runs[0]
-    cell6_run.font.size = Pt(14)
+
+
     cell6_1 = table2.cell(1, 0)
     cell6_1.text = "•Unboxing video is mandatory for returns or replacements."
     cell6_1_run = cell6_1.paragraphs[0].runs[0]
@@ -147,12 +146,7 @@ def add_customer_details(doc, customer_name, address, phone, product_name,bill_n
 
 
 
-    table_total = doc.add_table(rows=3, cols=4)
-    sub_total_cell = table_total.cell(0, 3)
-    sub_total_paragraph = sub_total_cell.add_paragraph("SubTotal:  "+ str(total_sum))
-    sub_total_paragraph.alignment = WD_ALIGN_PARAGRAPH.RIGHT
-    sub_total_paragraph = sub_total_paragraph.runs[0]
-    sub_total_paragraph.font.size = Pt(12)
+
 
 
     if add_notes and not isinstance(add_notes, float) or (isinstance(add_notes, float) and not math.isnan(add_notes)):
