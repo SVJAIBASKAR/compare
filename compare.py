@@ -257,7 +257,7 @@ if data is not None and not st.session_state.downloaded:
             'Billing Address Line2', 'Billing City', 'Billing State',
             'Billing Pincode', 'e-Way Bill Number', 'Seller Name',
             'Seller GST Number', 'Seller Address Line1', 'Seller Address Line2',
-            'Seller City', 'Seller State', 'Seller Pincode'
+            'Seller City', 'Seller State', 'Seller Pincode','Shipping Cost'
         ]
         cust_column_names = ['Tdate','CNo','DeptDesc','CrCode','RefNo','cnee','Caddr1',
         'Caddr2','Caddr3','CPincode','CPhone','Destn','Wt','Pcs','DDate','Status','RName','NonDStatus']
@@ -273,7 +273,7 @@ if data is not None and not st.session_state.downloaded:
             group_order = order[order['Order Number'] == row['Order Number']]
         #    payment_mode = true_order.loc[true_order["Order Number"] == row['Order Number'], ["Payment Method","Additional Notes"]].values[0]
         #    payment_mode = true_order.loc[true_order["Order Number"] == row['Order Number'], ["Payment Method", "Additional Notes"]].values[0]
-            payment_mode = true_order.loc[true_order["Order Number"] == row["Order Number"], ["Payment Method", "Additional Notes"]].values[0]
+            payment_mode = true_order.loc[true_order["Order Number"] == row["Order Number"], ["Payment Method", "Additional Notes","Shipping Cost"]].values[0]
 
 
             if not group_order.empty:
@@ -335,7 +335,8 @@ if data is not None and not st.session_state.downloaded:
                     'Seller City': "",
                     'Seller State': "",
                     'Seller Pincode': "",
-                    'Notes':payment_mode[1]
+                    'Notes':payment_mode[1],
+                    'Shipping Cost':payment_mode[2]
                 }
 
                 word_row ={
