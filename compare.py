@@ -71,7 +71,7 @@ def add_customer_details(doc, customer_name, address, phone, product_name,bill_n
     cell3_run.font.size = Pt(12)
     # Add address
     cell4 = table1.cell(0, 2)
-    shop_add="Krish Accessories\nGG Nagar, Nerkundram\nChennai 6000107\n8939789237"
+    shop_add="Krish Accessories\nGG Nagar, Nerkundram\nChennai 600107\n8939789237"
     cell4.text = "From Address:\n"+shop_add
     cell4.alignment = WD_ALIGN_PARAGRAPH.RIGHT
     cell4_run = cell4.paragraphs[0].runs[0]
