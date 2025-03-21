@@ -76,7 +76,7 @@ def add_customer_details(doc, customer_name, address, phone, product_name,bill_n
     cell4.alignment = WD_ALIGN_PARAGRAPH.RIGHT
     cell4_run = cell4.paragraphs[0].runs[0]
     cell4_run.font.size = Pt(12)
-    table2 = doc.add_table(rows=5, cols=1)
+    table2 = doc.add_table(rows=3, cols=1)
     # Add phone
     cell5 = table2.cell(0, 0)
     cell5.text = "Customer Phone:"+phone
@@ -92,14 +92,14 @@ def add_customer_details(doc, customer_name, address, phone, product_name,bill_n
     cell6_2.text = "•The address mentioned in this label is booking office's address."
     cell6_2_run = cell6_2.paragraphs[0].runs[0]
     cell6_2_run.font.size = Pt(12)
-    cell6_3 = table2.cell(3, 0)
+    '''cell6_3 = table2.cell(3, 0)
     cell6_3.text = "•Kindly do not return the parcel  to the booking office. We are not responsible if it is lost."
     cell6_3_run = cell6_3.paragraphs[0].runs[0]
     cell6_3_run.font.size= Pt(12)
     cell6_4 = table2.cell(4, 0)
     cell6_4.text = "•Return time is valid only for 7 days from the date of Return Approval."
     cell6_4_run = cell6_4.paragraphs[0].runs[0]
-    cell6_4_run.font.size= Pt(12)
+    cell6_4_run.font.size= Pt(12)'''
     data = [["S.No", "Product Name","QTY", "Unit_Total"]]
     product_list = product_name.split(",")
 
@@ -112,12 +112,6 @@ def add_customer_details(doc, customer_name, address, phone, product_name,bill_n
         product_full_name = re.sub(r'\s*\[\d+\]', '', product).strip()
         total_value = total_list[idx-1]
         data.append([idx, product_full_name, number_in_brackets, total_value ])
-    end_table = doc.add_table(rows=2, cols=2)
-    right_cell = end_table.cell(0, 0)
-    right_paragraph = right_cell.add_paragraph( "Order Number:"+bill_number)
-    right_paragraph.alignment = WD_ALIGN_PARAGRAPH.RIGHT
-    right_run = right_paragraph.runs[0]
-    right_run.font.size = Pt(12)
 
     table_grid = doc.add_table(rows=1, cols=len(data[0]))
     table_grid.style = 'Table Grid'  # Apply a grid style to the table
