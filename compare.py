@@ -102,6 +102,7 @@ def add_customer_details(doc, customer_name, address, phone, product_name,bill_n
     cell6_4_run.font.size= Pt(12)
     data = [["S.No", "Product Name","QTY", "Unit_Total"]]
     product_list = product_name.split(",")
+    Sub_Total=1111
     total_list=Sub_Total.split(",")
     total_sum_list = [float(x) for x in Sub_Total.split(",")]
     total_sum = sum(total_sum_list)
@@ -111,6 +112,12 @@ def add_customer_details(doc, customer_name, address, phone, product_name,bill_n
         product_full_name = re.sub(r'\s*\[\d+\]', '', product).strip()
         total_value = total_list[idx-1]
         data.append([idx, product_full_name, number_in_brackets, total_value ])
+    end_table = doc.add_table(rows=2, cols=2)
+    right_cell = end_table.cell(0, 0)
+    right_paragraph = right_cell.add_paragraph( "Order Number:"+bill_number)
+    right_paragraph.alignment = WD_ALIGN_PARAGRAPH.RIGHT
+    right_run = right_paragraph.runs[0]
+    right_run.font.size = Pt(12)
 
     table_grid = doc.add_table(rows=1, cols=len(data[0]))
     table_grid.style = 'Table Grid'  # Apply a grid style to the table
