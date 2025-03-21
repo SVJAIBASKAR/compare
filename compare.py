@@ -92,14 +92,7 @@ def add_customer_details(doc, customer_name, address, phone, product_name,bill_n
     cell6_2.text = "•The address mentioned in this label is booking office's address."
     cell6_2_run = cell6_2.paragraphs[0].runs[0]
     cell6_2_run.font.size = Pt(12)
-    '''cell6_3 = table2.cell(3, 0)
-    cell6_3.text = "•Kindly do not return the parcel  to the booking office. We are not responsible if it is lost."
-    cell6_3_run = cell6_3.paragraphs[0].runs[0]
-    cell6_3_run.font.size= Pt(12)
-    cell6_4 = table2.cell(4, 0)
-    cell6_4.text = "•Return time is valid only for 7 days from the date of Return Approval."
-    cell6_4_run = cell6_4.paragraphs[0].runs[0]
-    cell6_4_run.font.size= Pt(12)'''
+
     data = [["S.No", "Product Name","QTY", "Unit_Total"]]
     product_list = product_name.split(",")
 
