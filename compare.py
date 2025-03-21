@@ -47,7 +47,7 @@ def set_page_size(doc, width_mm=148, height_mm=210):
         # Add the new pgSize element
         sect_pr.append(pg_size)
 
-def add_customer_details(doc, customer_name, address, phone, product_name,bill_number,Total,add_notes,Sub_Total):
+def add_customer_details(doc, customer_name, address, phone, product_name,bill_number,Total,add_notes,Sub_Total,Total_amount,Shipping_Cost):
 
 
 
@@ -102,7 +102,7 @@ def add_customer_details(doc, customer_name, address, phone, product_name,bill_n
     cell6_4_run.font.size= Pt(12)
     data = [["S.No", "Product Name","QTY", "Unit_Total"]]
     product_list = product_name.split(",")
-    Sub_Total=1111
+
     total_list=Sub_Total.split(",")
     total_sum_list = [float(x) for x in Sub_Total.split(",")]
     total_sum = sum(total_sum_list)
@@ -150,7 +150,17 @@ def add_customer_details(doc, customer_name, address, phone, product_name,bill_n
             #row_paragraph.alignment = WD_ALIGN_PARAGRAPH.CENTER
 
 
-
+    table_cost = doc.add_table(rows=2, cols=3)
+    cell_ship_cost = table_cost.cell(0, 2)
+    cell_ship_cost.text = "Shipping Cost:"+str(Shipping_Cost)
+    cell_ship_cost_run = cell_ship_cost.paragraphs[0].runs[0]
+    cell_ship_cost_run.alignment = WD_ALIGN_PARAGRAPH.LEFT
+    cell_ship_cost_run.font.size = Pt(12)
+    cell_cost = table_cost.cell(1, 2)
+    cell_cost.text = "Total Cost:"+str(Total_amount)
+    cell_cost_run = cell_cost.paragraphs[0].runs[0]
+    cell_cost_run.alignment = WD_ALIGN_PARAGRAPH.LEFT
+    cell_cost_run.font.size = Pt(12)
 
 
 
@@ -280,7 +290,7 @@ if data is not None and not st.session_state.downloaded:
             group_order = order[order['Order Number'] == row['Order Number']]
         #    payment_mode = true_order.loc[true_order["Order Number"] == row['Order Number'], ["Payment Method","Additional Notes"]].values[0]
         #    payment_mode = true_order.loc[true_order["Order Number"] == row['Order Number'], ["Payment Method", "Additional Notes"]].values[0]
-            payment_mode = true_order.loc[true_order["Order Number"] == row["Order Number"], ["Payment Method", "Additional Notes","Shipping Cost"]].values[0]
+            payment_mode = true_order.loc[true_order["Order Number"] == row["Order Number"], ["Payment Method", "Additional Notes","Shipping Cost","Total Amount"]].values[0]
 
 
             if not group_order.empty:
@@ -343,7 +353,8 @@ if data is not None and not st.session_state.downloaded:
                     'Seller State': "",
                     'Seller Pincode': "",
                     'Notes':payment_mode[1],
-                    'Shipping Cost':payment_mode[2]
+                    'Shipping Cost':payment_mode[2],
+                    'Total Cost':payment_mode[3]
                 }
 
                 word_row ={
@@ -401,7 +412,7 @@ if data is not None and not st.session_state.downloaded:
         doc = Document()
         set_page_size(doc)
         payment_mode = upload.loc[upload["*Payment Mode"].str.upper() == "PREPAID"]
-        Prepaid_order=payment_mode[["*Customer Name","*Shipping Address Line1","*Customer Phone","*Item Sku Name","*Sale Order Number","*Unit Item Price","Notes",'Sub_Total']]
+        Prepaid_order=payment_mode[["*Customer Name","*Shipping Address Line1","*Customer Phone","*Item Sku Name","*Sale Order Number","*Unit Item Price","Notes",'Sub_Total','Shipping Cost','Total Cost']]
         Prepaid_order = Prepaid_order.rename(columns={
     '*Customer Name': 'Customer_Name',
     '*Sale Order Number':'Order_Number',
@@ -410,7 +421,9 @@ if data is not None and not st.session_state.downloaded:
     '*Item Sku Name': 'Product_Name',
     '*Unit Item Price':'Total',
     'Notes':'Notes',
-    'Sub_Total':'Sub_Total'
+    'Sub_Total':'Sub_Total',
+    'Total_Amount':'Total Cost',
+    'Shipping Cost':'Shipping Cost'
 })
 
         for i in range(len(Prepaid_order)):
@@ -426,10 +439,12 @@ if data is not None and not st.session_state.downloaded:
             Unit_Total =row['Total']
             Notes=row['Notes']
             Sub_Total=row['Sub_Total']
+            Total=row['Total Cost']
+            Shipping_Cost=row['Shipping Cost']
 
 
     # Call the function to add customer details to the document
-            word_data=add_customer_details(doc, customer_name, address, customer_phone, product_name,order_number,Unit_Total,Notes,Sub_Total)
+            word_data=add_customer_details(doc, customer_name, address, customer_phone, product_name,order_number,Unit_Total,Notes,Sub_Total,Total,Shipping_Cost)
             #if (i + 1) % 2 == 0:
             doc.add_page_break()
 
