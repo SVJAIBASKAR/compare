@@ -150,13 +150,13 @@ def add_customer_details(doc, customer_name, address, phone, product_name,bill_n
             #row_paragraph.alignment = WD_ALIGN_PARAGRAPH.CENTER
 
 
-    table_cost = doc.add_table(rows=2, cols=4)
-    cell_ship_cost = table_cost.cell(0, 3)
+    table_cost = doc.add_table(rows=2, cols=3)
+    cell_ship_cost = table_cost.cell(0, 2)
     cell_ship_cost.text = "Shipping Cost:"+str(Shipping_Cost)
     cell_ship_cost_run = cell_ship_cost.paragraphs[0].runs[0]
     cell_ship_cost_run.alignment = WD_ALIGN_PARAGRAPH.LEFT
     cell_ship_cost_run.font.size = Pt(12)
-    cell_cost = table_cost.cell(1, 3)
+    cell_cost = table_cost.cell(1, 2)
     cell_cost.text = "Total Cost:"+str(Total_amount)
     cell_cost_run = cell_cost.paragraphs[0].runs[0]
     cell_cost_run.alignment = WD_ALIGN_PARAGRAPH.LEFT
