@@ -311,7 +311,7 @@ if data is not None and not st.session_state.downloaded:
                     '*Item Sku Name': row['Qty Ordered'],
                     '*Quantity Ordered': "1",
                     'Packaging Type': "",
-                    'Sub_Total': int(float(row['Price'])),
+                    'Sub_Total': int((row['Price'])),
                     '*Unit Item Price': int(float(group_order['Total Amount'].values[0])),
                     'Length (cm)': "10",
                     'Breadth (cm)': "10",
@@ -338,7 +338,7 @@ if data is not None and not st.session_state.downloaded:
                     'Seller Pincode': "",
                     'Notes':payment_mode[1],
                     'Shipping Cost': int(float(payment_mode[2])),
-                    'Total Cost':int(float(payment_mode[3]))
+                    'Total Cost':int((payment_mode[3]))
                 }
 
                 word_row ={
