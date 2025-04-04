@@ -428,7 +428,7 @@ if data is not None and not st.session_state.downloaded:
 
 
     # Call the function to add customer details to the document
-            word_data=add_customer_details(doc, customer_name, address, customer_phone, product_name,order_number,(Unit_Total,Notes),(Sub_Total),(Total),(Shipping_Cost))
+            word_data=add_customer_details(doc, customer_name, address, customer_phone, product_name,order_number,Unit_Total,Notes,Sub_Total,Total,Shipping_Cost)
             #if (i + 1) % 2 == 0:
             doc.add_page_break()
 
