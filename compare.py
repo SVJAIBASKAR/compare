@@ -312,7 +312,7 @@ if data is not None and not st.session_state.downloaded:
                     '*Quantity Ordered': "1",
                     'Packaging Type': "",
                     'Sub_Total': row['Price'],
-                    '*Unit Item Price': int(group_order['Total Amount'].values[0]),
+                    '*Unit Item Price': int(float(group_order['Total Amount'].values[0])),
                     'Length (cm)': "10",
                     'Breadth (cm)': "10",
                     'Height (cm)': "10",
