@@ -338,7 +338,7 @@ if data is not None and not st.session_state.downloaded:
                     'Seller Pincode': "",
                     'Notes':payment_mode[1],
                     'Shipping Cost': int(float(payment_mode[2])),
-                    'Total Cost':payment_mode[3]
+                    'Total Cost':int(float(payment_mode[3]))
                 }
 
                 word_row ={
