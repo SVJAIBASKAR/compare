@@ -76,7 +76,7 @@ def add_customer_details(doc, customer_name, address, phone, product_name,bill_n
     cell4.alignment = WD_ALIGN_PARAGRAPH.RIGHT
     cell4_run = cell4.paragraphs[0].runs[0]
     cell4_run.font.size = Pt(12)
-    table2 = doc.add_table(rows=3, cols=1)
+    table2 = doc.add_table(rows=2, cols=1)
     # Add phone
     cell5 = table2.cell(0, 0)
     cell5.text = "Customer Phone:"+phone
@@ -88,10 +88,7 @@ def add_customer_details(doc, customer_name, address, phone, product_name,bill_n
     cell6_1.text = "•Unboxing video is mandatory for returns or replacements."
     cell6_1_run = cell6_1.paragraphs[0].runs[0]
     cell6_1_run.font.size = Pt(12)
-    cell6_2 = table2.cell(2, 0)
-    cell6_2.text = "•The address mentioned in this label is booking office's address."
-    cell6_2_run = cell6_2.paragraphs[0].runs[0]
-    cell6_2_run.font.size = Pt(12)
+
 
     data = [["S.No", "Product Name","QTY", "Unit_Total"]]
     product_list = product_name.split(",")
@@ -340,7 +337,7 @@ if data is not None and not st.session_state.downloaded:
                     'Seller State': "",
                     'Seller Pincode': "",
                     'Notes':payment_mode[1],
-                    'Shipping Cost':payment_mode[2],
+                    'Shipping Cost': int(float(payment_mode[2])),
                     'Total Cost':payment_mode[3]
                 }
 
