@@ -490,3 +490,6 @@ if data is not None and not st.session_state.downloaded:
 if st.session_state.downloaded:
     st.session_state.downloaded = False
     rerun()
+
+
+    
