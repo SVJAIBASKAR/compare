@@ -141,7 +141,8 @@ def add_customer_details(doc, customer_name, address, phone, product_name,bill_n
     cell_ship_cost_run.alignment = WD_ALIGN_PARAGRAPH.LEFT
     cell_ship_cost_run.font.size = Pt(12)
     cell_cost = table_cost.cell(1, 2)
-    cell_cost.text = "Total Cost:"+str(Total_amount)
+    #cell_cost.text = "Total Cost:"+str(Total_amount)
+    cell_cost.text = "Total Cost: {:,}".format(Total_amount)
     cell_cost_run = cell_cost.paragraphs[0].runs[0]
     cell_cost_run.alignment = WD_ALIGN_PARAGRAPH.LEFT
     cell_cost_run.font.size = Pt(12)
