@@ -100,7 +100,7 @@ def add_customer_details(doc, customer_name, address, phone, product_name,bill_n
         match = re.search(r'\[(\d+)\]', product)
         number_in_brackets = match.group(1)
         product_full_name = re.sub(r'\s*\[\d+\]', '', product).strip()
-        total_value = int(total_list[idx-1])
+        total_value = int(float(total_list[idx-1]))
         data.append([idx, product_full_name, number_in_brackets, total_value])
 
     table_grid = doc.add_table(rows=1, cols=len(data[0]))
