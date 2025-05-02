@@ -338,7 +338,7 @@ if data is not None and not st.session_state.downloaded:
                     'Seller State': "",
                     'Seller Pincode': "",
                     'Notes':payment_mode[1],
-                    'Shipping Cost': int(float(payment_mode[2])),
+                    'Shipping Cost':pd.Series([payment_mode[2]], dtype='Int64')[0],
                     'Total Cost':int(float(payment_mode[3]))
                 }
 
