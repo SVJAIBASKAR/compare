@@ -47,17 +47,22 @@ def set_page_size(doc, width_mm=148, height_mm=210):
         # Add the new pgSize element
         sect_pr.append(pg_size)
 
-def add_customer_details(doc, customer_name, address, phone, product_name,bill_number,Total,add_notes,Sub_Total,Total_amount,Shipping_Cost):
+def add_customer_details(doc, customer_name, address, phone, product_name,bill_number,order_date,Total,add_notes,Sub_Total,Total_amount,Shipping_Cost):
 
 
 
 
-    table = doc.add_table(rows=2, cols=2)
+    table = doc.add_table(rows=3, cols=2)
     left_cell = table.cell(0, 0)
     left_paragraph = left_cell.add_paragraph( "Order Number:"+bill_number)
     left_paragraph.alignment = WD_ALIGN_PARAGRAPH.LEFT
     left_run = left_paragraph.runs[0]
     left_run.font.size = Pt(12)
+    left_cell1 = table.cell(1, 0)
+    left_paragraph1 = left_cell.add_paragraph( "Order Date:"+order_date)
+    left_paragraph1.alignment = WD_ALIGN_PARAGRAPH.LEFT
+    left_run1 = left_paragraph1.runs[0]
+    left_run1.font.size = Pt(12)
     table1 = doc.add_table(rows=1, cols=3)
     # Add customer name
     cell1 = table.cell(1, 0)
@@ -237,6 +242,7 @@ if data is not None and not st.session_state.downloaded:
 ]
         true_inquiry ['Qty Ordered'] = inquiry['Product Name'] + " "+ "["+ inquiry['Item Count'].astype(str) + "]"
         true_order_number = true_order['Order Number'].astype(str).str.upper()
+
         filtered_inquiry_df = true_inquiry[true_inquiry['Order Number'].astype(str).str.upper().isin(true_order_number)]
 
         merged_inquiry_df = filtered_inquiry_df.groupby('Order Number', as_index=False).agg({
@@ -247,7 +253,7 @@ if data is not None and not st.session_state.downloaded:
 })
 
         column_names = [
-            '*Sale Order Number', '*Pickup Location Name', '*Transport Mode',
+            '*Sale Order Number','*Sale Order Date', '*Pickup Location Name', '*Transport Mode',
             '*Payment Mode', 'COD Amount', '*Customer Name', '*Customer Phone',
             '*Shipping Address Line1', 'Shipping Address Line2', '*Shipping City',
             '*Shipping State', '*Shipping Pincode', '*Item Sku Code',
@@ -297,6 +303,7 @@ if data is not None and not st.session_state.downloaded:
                 # Create a new row dictionary
                 new_row = {
                     '*Sale Order Number': row['Order Number'],
+                     '*Sale Order Date':group_order['Order Started Date (Order Created Date)'].values[0],
                     '*Pickup Location Name': 'KRISH ACCESSORIES D2C',
                     '*Transport Mode': "Surface",
                     '*Payment Mode':  payment_mode[0],
@@ -397,10 +404,11 @@ if data is not None and not st.session_state.downloaded:
         doc = Document()
         set_page_size(doc)
         payment_mode = upload.loc[upload["*Payment Mode"].str.upper() == "PREPAID"]
-        Prepaid_order=payment_mode[["*Customer Name","*Shipping Address Line1","*Customer Phone","*Item Sku Name","*Sale Order Number","*Unit Item Price","Notes",'Sub_Total','Shipping Cost','Total Cost']]
+        Prepaid_order=payment_mode[["*Customer Name","*Shipping Address Line1","*Customer Phone","*Item Sku Name","*Sale Order Number","*Sale Order Date","*Unit Item Price","Notes",'Sub_Total','Shipping Cost','Total Cost']]
         Prepaid_order = Prepaid_order.rename(columns={
     '*Customer Name': 'Customer_Name',
     '*Sale Order Number':'Order_Number',
+    "*Sale Order Date" :'Order_Date',
     '*Shipping Address Line1': 'Address',
     '*Customer Phone': 'Customer_Phone',
     '*Item Sku Name': 'Product_Name',
@@ -421,6 +429,7 @@ if data is not None and not st.session_state.downloaded:
             customer_phone = row['Customer_Phone']
             product_name = row['Product_Name']
             order_number=row['Order_Number']
+            order_date=row['Order_Date']
             Unit_Total =row['Total']
             Notes=row['Notes']
             Sub_Total=row['Sub_Total']
@@ -429,7 +438,7 @@ if data is not None and not st.session_state.downloaded:
 
 
     # Call the function to add customer details to the document
-            word_data=add_customer_details(doc, customer_name, address, customer_phone, product_name,order_number,Unit_Total,Notes,Sub_Total,Total,Shipping_Cost)
+            word_data=add_customer_details(doc, customer_name, address, customer_phone, product_name,order_number,order_date,Unit_Total,Notes,Sub_Total,Total,Shipping_Cost)
             #if (i + 1) % 2 == 0:
             doc.add_page_break()
 
